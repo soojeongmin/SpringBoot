@@ -30,7 +30,7 @@
              , ROLE
         FROM MEMBER
         WHERE ID = (
-            SELECT INFULL(MAX(M.ID), 1)
+            SELECT IFNULL(MAX(M.ID), 1)
             FROM MEMBER M
         )
     </select>

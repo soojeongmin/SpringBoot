@@ -70,4 +70,19 @@
             WHERE ID = #{id}
     </update>
 
+    <select id="usernameCheck"
+            parameterType="String"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE USERNAME = #{username}
+    </select>
+
+    <select id="nicknameCheck"
+            parameterType="String"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE NICKNAME = #{nickname}
+    </select>
 </mapper>

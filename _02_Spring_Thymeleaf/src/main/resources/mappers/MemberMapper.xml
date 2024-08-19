@@ -12,12 +12,12 @@
             NICKNAME,
             TEL
         ) VALUES (
-            #{username},
-            #{password},
-            #{email},
-            #{nickname},
-            #{tel}
-        )
+                     #{username},
+                     #{password},
+                     #{email},
+                     #{nickname},
+                     #{tel}
+                 )
     </insert>
 
     <select id="findLastMember"
@@ -37,7 +37,12 @@
 
     <select id="findAll"
             resultType="MemberDto">
-        SELECT *
+        SELECT ID
+             , USERNAME
+             , EMAIL
+             , NICKNAME
+             , TEL
+             , ROLE
         FROM MEMBER
     </select>
 
@@ -50,28 +55,29 @@
              , NICKNAME
              , TEL
              , ROLE
-            FROM MEMBER
-            WHERE ID = #{id}
+        FROM MEMBER
+        WHERE ID = #{id}
     </select>
 
     <delete id="remove"
             parameterType="int">
         DELETE FROM MEMBER
-            WHERE ID = #{id};
+        WHERE ID = #{id}
     </delete>
 
     <update id="modify"
             parameterType="MemberDto">
         UPDATE MEMBER
-            SET PASSWORD = #{password}
-              , NICKNAME = #{nickname}
-              , EMAIL = #{email}
-              , TEL = #{tel}
-            WHERE ID = #{id}
+        SET
+            PASSWORD = #{password},
+            NICKNAME = #{nickname},
+            EMAIL = #{email},
+            TEL = #{tel}
+        WHERE ID = #{id}
     </update>
 
     <select id="usernameCheck"
-            parameterType="String"
+            parameterType="string"
             resultType="int">
         SELECT COUNT(*)
         FROM MEMBER
@@ -79,10 +85,24 @@
     </select>
 
     <select id="nicknameCheck"
-            parameterType="String"
+            parameterType="string"
             resultType="int">
         SELECT COUNT(*)
         FROM MEMBER
         WHERE NICKNAME = #{nickname}
+    </select>
+
+    <select id="findByIdAndPassword"
+            parameterType="MemberDto"
+            resultType="MemberDto">
+        SELECT ID
+             , USERNAME
+             , EMAIL
+             , NICKNAME
+             , TEL
+             , ROLE
+        FROM MEMBER
+        WHERE USERNAME = #{username}
+          AND PASSWORD = #{password}
     </select>
 </mapper>

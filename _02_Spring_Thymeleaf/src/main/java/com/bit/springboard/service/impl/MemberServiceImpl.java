@@ -6,7 +6,6 @@ import com.bit.springboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,4 +72,25 @@ public class MemberServiceImpl implements MemberService {
         return returnMap;
     }
 
+    @Override
+    public void join(MemberDto memberDto) {
+        memberMapper.save(memberDto);
+    }
+
+    @Override
+    public MemberDto login(MemberDto memberDto) {
+        int usernameCheck = memberMapper.usernameCheck(memberDto.getUsername());
+
+        if(usernameCheck == 0) {
+            throw new RuntimeException("id not exist");
+        }
+
+        MemberDto loginMember = memberMapper.findByIdAndPassword(memberDto);
+
+        if(loginMember == null) {
+            throw new RuntimeException("wrong password");
+        }
+
+        return loginMember;
+    }
 }

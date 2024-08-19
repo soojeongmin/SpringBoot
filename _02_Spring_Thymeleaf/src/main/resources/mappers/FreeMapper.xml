@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bit.springboard.mapper.FreeMapper">
+    <insert id="post"
+            parameterType="BoardDto">
+        INSERT INTO FREEBOARD (
+                           TITLE, CONTENT, WRITER_ID
+        ) VALUES (
+                   #{title}, #{content}, (
+                       SELECT M.ID FROM MEMBER M WHERE M.NICKNAME = #{nickname}
+                )
+        )
+    </insert>
+
+    <select id="findLast"
+            resultType="BoardDto">
+        SELECT F.ID, F.TITLE, F.CONTENT, F.WRITER_ID, M.NICKNAME, F.REGDATE, F.MODDATE, F.CNT
+        FROM FREEBOARD F JOIN MEMBER M ON F.WRITER_ID = M.ID
+        WHERE F.ID = ( SELECT IFNULL(MAX(FF.ID), 1) FROM FREEBOARD FF)
+    </select>
+</mapper>

@@ -3,6 +3,7 @@ package com.bit.springboard.service.impl;
 import com.bit.springboard.common.FileUtils;
 import com.bit.springboard.dto.BoardDto;
 import com.bit.springboard.dto.BoardFileDto;
+import com.bit.springboard.dto.Criteria;
 import com.bit.springboard.mapper.FreeMapper;
 import com.bit.springboard.service.BoardService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +46,14 @@ public class FreeServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardDto> findAll() {
-        return freeMapper.findAll();
+    public List<BoardDto> findAll(Map<String, String> searchMap, Criteria cri) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("search", searchMap);
+
+        cri.setStartNum((cri.getPageNum() - 1) * cri.getAmount());
+        paramMap.put("cri", cri);
+
+        return freeMapper.findAll(paramMap);
     }
 
     @Override
@@ -131,5 +136,21 @@ public class FreeServiceImpl implements BoardService {
         });
 
         return freeMapper.findById(boardDto.getId());
+    }
+
+    @Override
+    public void updateBoardCnt(int id) {
+        freeMapper.updateBoardCnt(id);
+    }
+
+    @Override
+    public void remove(int id) {
+        freeMapper.removeFiles(id);
+        freeMapper.remove(id);
+    }
+
+    @Override
+    public int findTotalCnt(Map<String, String> searchMap) {
+        return freeMapper.findTotalCnt(searchMap);
     }
 }

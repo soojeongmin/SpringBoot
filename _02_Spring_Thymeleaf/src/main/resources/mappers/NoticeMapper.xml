@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bit.springboard.mapper.FreeMapper">
+<mapper namespace="com.bit.springboard.mapper.NoticeMapper">
     <insert id="post"
             parameterType="BoardDto">
         <selectKey keyProperty="id" order="AFTER" resultType="int">
-            SELECT IFNULL(MAX(ID), 1) FROM FREEBOARD
+            SELECT IFNULL(MAX(ID), 1) FROM NOTICE
         </selectKey>
-        INSERT INTO FREEBOARD(
+        INSERT INTO NOTICE(
         TITLE,
         CONTENT,
         WRITER_ID
@@ -26,24 +26,24 @@
     <select id="findById"
             parameterType="int"
             resultType="BoardDto">
-        SELECT F.ID
-        , F.TITLE
-        , F.CONTENT
-        , F.WRITER_ID
+        SELECT N.ID
+        , N.TITLE
+        , N.CONTENT
+        , N.WRITER_ID
         , M.NICKNAME
-        , F.REGDATE
-        , F.MODDATE
-        , F.CNT
-        , 'free' as type
-        FROM FREEBOARD F
+        , N.REGDATE
+        , N.MODDATE
+        , N.CNT
+        , 'notice' as type
+        FROM NOTICE N
         JOIN MEMBER M
-        ON F.WRITER_ID = M.ID
-        WHERE F.ID = #{id}
+        ON N.WRITER_ID = M.ID
+        WHERE N.ID = #{id}
     </select>
 
     <insert id="postFiles"
             parameterType="list">
-        INSERT INTO FREEBOARD_FILE (
+        INSERT INTO NOTICE_FILE (
         BOARD_ID,
         FILENAME,
         FILEORIGINNAME,
@@ -64,32 +64,32 @@
     <select id="findAll"
             parameterType="map"
             resultType="BoardDto">
-        SELECT F.ID
-        , F.TITLE
-        , F.CONTENT
-        , F.WRITER_ID
+        SELECT N.ID
+        , N.TITLE
+        , N.CONTENT
+        , N.WRITER_ID
         , M.NICKNAME
-        , F.REGDATE
-        , F.MODDATE
-        , F.CNT
-        , 'free' as type
-        FROM FREEBOARD F
+        , N.REGDATE
+        , N.MODDATE
+        , N.CNT
+        , 'notice' as type
+        FROM NOTICE N
         JOIN MEMBER M
-        ON F.WRITER_ID = M.ID
+        ON N.WRITER_ID = M.ID
         WHERE 1=1
         <if test="search.searchKeyword != null and search.searchKeyword != ''">
             <if test="search.searchCondition == 'all'">
                 AND (
-                F.TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
-                OR F.CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
+                N.TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
+                OR N.CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
                 OR M.NICKNAME LIKE CONCAT('%', #{search.searchKeyword}, '%')
                 )
             </if>
             <if test="search.searchCondition == 'title'">
-                AND F.TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
+                AND N.TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
             </if>
             <if test="search.searchCondition == 'content'">
-                AND F.CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
+                AND N.CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
             </if>
             <if test="search.searchCondition == 'writer'">
                 AND M.NICKNAME LIKE CONCAT('%', #{search.searchKeyword}, '%')
@@ -107,13 +107,13 @@
         , FIlEORIGINNAME
         , FILEPATH
         , FILETYPE
-        FROM FREEBOARD_FILE
+        FROM NOTICE_FILE
         WHERE BOARD_ID = #{id}
     </select>
 
     <update id="modify"
             parameterType="BoardDto">
-        UPDATE FREEBOARD
+        UPDATE NOTICE
         SET
         TITLE = #{title},
         CONTENT = #{content},
@@ -123,7 +123,7 @@
 
     <update id="modifyFile"
             parameterType="BoardFileDto">
-        UPDATE FREEBOARD_FILE
+        UPDATE NOTICE_FILE
         SET
         FILENAME = #{filename},
         FILEORIGINNAME = #{fileoriginname},
@@ -135,14 +135,14 @@
 
     <delete id="removeFile"
             parameterType="BoardFileDto">
-        DELETE FROM FREEBOARD_FILE
+        DELETE FROM NOTICE_FILE
         WHERE ID = #{id}
         AND BOARD_ID = #{board_id}
     </delete>
 
     <insert id="postFile"
             parameterType="BoardFileDto">
-        INSERT INTO FREEBOARD_FILE (
+        INSERT INTO NOTICE_FILE (
         BOARD_ID,
         FILENAME,
         FILEORIGINNAME,
@@ -159,7 +159,7 @@
 
     <update id="updateBoardCnt"
             parameterType="int">
-        UPDATE FREEBOARD
+        UPDATE NOTICE
         SET
         CNT = CNT + 1
         WHERE ID = #{id}
@@ -167,13 +167,13 @@
 
     <delete id="removeFiles"
             parameterType="int">
-        DELETE FROM FREEBOARD_FILE
+        DELETE FROM NOTICE_FILE
         WHERE BOARD_ID = #{id}
     </delete>
 
     <delete id="remove"
             parameterType="int">
-        DELETE FROM FREEBOARD
+        DELETE FROM NOTICE
         WHERE ID = #{id}
     </delete>
 
@@ -181,47 +181,26 @@
             parameterType="map"
             resultType="int">
         SELECT COUNT(*)
-        FROM FREEBOARD F
+        FROM NOTICE N
         JOIN MEMBER M
-        ON F.WRITER_ID = M.ID
+        ON N.WRITER_ID = M.ID
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 'all'">
                 AND (
-                    F.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
-                    OR F.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
-                    OR M.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                N.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR N.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+                OR M.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
                 )
             </if>
             <if test="searchCondition == 'title'">
-                AND F.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                AND N.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
             </if>
             <if test="searchCondition == 'content'">
-                AND F.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+                AND N.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
             </if>
             <if test="searchCondition == 'writer'">
                 AND M.NICKNAME LIKE CONCAT('%', #{searchKeyword}, '%')
             </if>
-
-
-
-
         </if>
     </select>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </mapper>

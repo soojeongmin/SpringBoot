@@ -67,7 +67,25 @@
                         processData: false,
                         contentType: false,
                         success: (obj) => {
-                            console.log(obj);
+                            // console.log(obj);
+                            if(obj.statusCode === 200) {
+                                alert("정상적으로 수정되었습니다.");
+                                location.href = `/boards/${obj.data.id}?type=free`
+                            }
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+                });
+
+                $("#btn-delete").on("click", (e) => {
+                    $.ajax({
+                        url: `/boards/${$("#id").val()}?type=free`,
+                        type: "delete",
+                        success: (obj) => {
+                            alert("정상적으로 삭제되었습니다.");
+                            location.href = "/boards/free-list";
                         },
                         error: (err) => {
                             console.log(err);
@@ -280,7 +298,7 @@
             </div>
             <div class="container mt-3 mb-5 w-50 text-center" th:if="${session.loginMember != null && session.loginMember.id == board.writer_id}">
                 <button type="submit" id="btn-update" class="btn btn-outline-secondary">수정</button>
-                <button type="button" id="btn-delete" class="btn btn-outline-secondary ml-2" onclick="location.href='/board/deleteBoard.do?boardNo=${getBoard.boardNo}'">삭제</button>
+                <button type="button" id="btn-delete" class="btn btn-outline-secondary ml-2">삭제</button>
             </div>
         </form>
     </div>

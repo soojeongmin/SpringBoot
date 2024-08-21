@@ -5,6 +5,7 @@ import com.bit.springboard.dto.BoardFileDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface FreeMapper {
@@ -14,9 +15,11 @@ public interface FreeMapper {
 
     void postFiles(List<BoardFileDto> boardFileDtoList);
 
-    List<BoardDto> findAll();
+    List<BoardDto> findAll(Map<String, Object> searchMap);
 
     List<BoardFileDto> findFilesById(int id);
+
+    void modify(BoardDto boardDto);
 
     void modifyFile(BoardFileDto boardFileDto);
 
@@ -24,5 +27,11 @@ public interface FreeMapper {
 
     void postFile(BoardFileDto boardFileDto);
 
-    void modify(BoardDto boardDto);
+    void updateBoardCnt(int id);
+
+    void removeFiles(int id);
+
+    void remove(int id);
+
+    int findTotalCnt(Map<String, String> searchMap);
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NoticeServiceImpl implements BoardService {
-
     @Override
     public BoardDto post(BoardDto boardDto) {
         return null;

@@ -12,6 +12,4 @@ public class ResponseDto<T> {
     private List<T> dataList;
     private int statusCode;
     private String statusMessage;
-
-
 }

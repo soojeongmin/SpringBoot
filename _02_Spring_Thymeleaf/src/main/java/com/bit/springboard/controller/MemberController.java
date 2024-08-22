@@ -110,13 +110,17 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(MemberDto memberDto, HttpSession session, HttpServletResponse response) {
+    public ModelAndView login(MemberDto memberDto,
+                              HttpSession session,
+                              HttpServletResponse response) {
         ModelAndView mav = new ModelAndView();
 
         try {
             MemberDto loginMember = memberService.login(memberDto);
 
             session.setAttribute("loginMember", loginMember);
+
+            // "/"로 리다이렉트 시키기
             response.sendRedirect("/");
         } catch(Exception e) {
             mav.addObject("loginFailMsg", e.getMessage());
@@ -127,14 +131,16 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-    public void logout(HttpSession session, HttpServletResponse response) {
-        try{
+    public void logout(HttpSession session,
+                       HttpServletResponse response) {
+        try {
             session.invalidate();
             response.sendRedirect("/member/login");
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
 
 
 

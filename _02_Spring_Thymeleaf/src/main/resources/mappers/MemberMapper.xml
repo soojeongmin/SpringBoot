@@ -12,12 +12,12 @@
             NICKNAME,
             TEL
         ) VALUES (
-                     #{username},
-                     #{password},
-                     #{email},
-                     #{nickname},
-                     #{tel}
-                 )
+            #{username},
+            #{password},
+            #{email},
+            #{nickname},
+            #{tel}
+        )
     </insert>
 
     <select id="findLastMember"
@@ -28,11 +28,11 @@
              , NICKNAME
              , TEL
              , ROLE
-        FROM MEMBER
-        WHERE ID = (
-            SELECT IFNULL(MAX(M.ID), 1)
-            FROM MEMBER M
-        )
+            FROM MEMBER
+            WHERE ID = (
+                    SELECT IFNULL(MAX(M.ID), 1)
+                        FROM MEMBER M
+                )
     </select>
 
     <select id="findAll"
@@ -43,7 +43,7 @@
              , NICKNAME
              , TEL
              , ROLE
-        FROM MEMBER
+            FROM MEMBER
     </select>
 
     <select id="findById"
@@ -55,41 +55,41 @@
              , NICKNAME
              , TEL
              , ROLE
-        FROM MEMBER
-        WHERE ID = #{id}
+            FROM MEMBER
+            WHERE ID = #{id}
     </select>
 
     <delete id="remove"
             parameterType="int">
         DELETE FROM MEMBER
-        WHERE ID = #{id}
+            WHERE ID = #{id}
     </delete>
 
     <update id="modify"
             parameterType="MemberDto">
         UPDATE MEMBER
-        SET
-            PASSWORD = #{password},
-            NICKNAME = #{nickname},
-            EMAIL = #{email},
-            TEL = #{tel}
-        WHERE ID = #{id}
+            SET
+                PASSWORD = #{password},
+                NICKNAME = #{nickname},
+                EMAIL = #{email},
+                TEL = #{tel}
+            WHERE ID = #{id}
     </update>
-
+    
     <select id="usernameCheck"
             parameterType="string"
             resultType="int">
         SELECT COUNT(*)
-        FROM MEMBER
-        WHERE USERNAME = #{username}
+            FROM MEMBER
+            WHERE USERNAME = #{username}
     </select>
 
     <select id="nicknameCheck"
             parameterType="string"
             resultType="int">
         SELECT COUNT(*)
-        FROM MEMBER
-        WHERE NICKNAME = #{nickname}
+            FROM MEMBER
+            WHERE NICKNAME = #{nickname}
     </select>
 
     <select id="findByIdAndPassword"
@@ -101,8 +101,8 @@
              , NICKNAME
              , TEL
              , ROLE
-        FROM MEMBER
-        WHERE USERNAME = #{username}
-          AND PASSWORD = #{password}
+            FROM MEMBER
+            WHERE USERNAME = #{username}
+              AND PASSWORD = #{password}
     </select>
 </mapper>

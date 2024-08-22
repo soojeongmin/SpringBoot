@@ -28,17 +28,22 @@
              , NICKNAME
              , TEL
              , ROLE
-        FROM MEMBER
-        WHERE ID = (
-            SELECT IFNULL(MAX(M.ID), 1)
-            FROM MEMBER M
-        )
+            FROM MEMBER
+            WHERE ID = (
+                    SELECT IFNULL(MAX(M.ID), 1)
+                        FROM MEMBER M
+                )
     </select>
 
     <select id="findAll"
             resultType="MemberDto">
-        SELECT *
-        FROM MEMBER
+        SELECT ID
+             , USERNAME
+             , EMAIL
+             , NICKNAME
+             , TEL
+             , ROLE
+            FROM MEMBER
     </select>
 
     <select id="findById"
@@ -57,17 +62,17 @@
     <delete id="remove"
             parameterType="int">
         DELETE FROM MEMBER
-            WHERE ID = #{id};
+            WHERE ID = #{id}
     </delete>
 
     <update id="modify"
             parameterType="MemberDto">
         UPDATE MEMBER
-            SET PASSWORD = #{password}
-              , NICKNAME = #{nickname}
-              , EMAIL = #{email}
-              , TEL = #{tel}
+            SET
+                PASSWORD = #{password},
+                NICKNAME = #{nickname},
+                EMAIL = #{email},
+                TEL = #{tel}
             WHERE ID = #{id}
     </update>
-
 </mapper>

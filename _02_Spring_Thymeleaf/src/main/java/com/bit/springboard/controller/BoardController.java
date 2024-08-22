@@ -1,10 +1,10 @@
 package com.bit.springboard.controller;
 
-import com.bit.springboard.Application;
 import com.bit.springboard.dto.BoardDto;
 import com.bit.springboard.dto.MemberDto;
 import com.bit.springboard.dto.ResponseDto;
 import com.bit.springboard.service.BoardService;
+import com.bit.springboard.service.impl.FreeServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import java.net.URI;
 @RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
-    private final Application application;
     private BoardService boardService;
     private final ApplicationContext applicationContext;
 
@@ -81,19 +80,22 @@ public class BoardController {
     @PostMapping
     public ResponseEntity<?> post(BoardDto boardDto) {
         ResponseDto<BoardDto> responseDto = new ResponseDto<>();
+
         if(boardDto.getType().equals("free")) {
             boardService = applicationContext.getBean("freeServiceImpl", BoardService.class);
         } else {
             boardService = applicationContext.getBean("noticeServiceImpl", BoardService.class);
         }
+
         try {
             BoardDto returnBoardDto = boardService.post(boardDto);
+
             responseDto.setStatusCode(201);
             responseDto.setStatusMessage("created");
             responseDto.setData(returnBoardDto);
 
-            return ResponseEntity.created(URI.create("/boards/")).body(responseDto);
-        } catch (Exception e) {
+            return ResponseEntity.created(URI.create("/boards")).body(responseDto);
+        } catch(Exception e) {
             responseDto.setStatusCode(500);
             responseDto.setStatusMessage(e.getMessage());
             return ResponseEntity.internalServerError().body(responseDto);

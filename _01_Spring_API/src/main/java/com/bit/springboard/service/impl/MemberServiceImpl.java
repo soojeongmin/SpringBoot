@@ -6,7 +6,6 @@ import com.bit.springboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,5 +39,4 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.modify(memberDto);
         return memberMapper.findById(memberDto.getId());
     }
-
 }

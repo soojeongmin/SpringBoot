@@ -1,9 +1,11 @@
 package com.bit.springboard.controller;
 
+import com.bit.springboard.dto.BoardDto;
 import com.bit.springboard.dto.MemberDto;
 import com.bit.springboard.dto.ResponseDto;
 import com.bit.springboard.entity.Member;
 import com.bit.springboard.service.ApiService;
+import com.bit.springboard.service.BoardService;
 import com.bit.springboard.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -235,7 +238,23 @@ public class ApiController {
         }
     }
 
+    @PostMapping("/boards")
+    public ResponseEntity<?> post(BoardDto boardDto, MultipartFile[] uploadFiles) {
+        ResponseDto<BoardDto> responseDto = new ResponseDto<>();
+        try {
+            BoardDto returnBoardDto = apiService.post(boardDto, uploadFiles);
 
+            responseDto.setStatusCode(201);
+            responseDto.setStatusMessage("created");
+            responseDto.setData(returnBoardDto);
+
+            return ResponseEntity.created(URI.create("/boards")).body(responseDto);
+        } catch(Exception e) {
+            responseDto.setStatusCode(500);
+            responseDto.setStatusMessage(e.getMessage());
+            return ResponseEntity.internalServerError().body(responseDto);
+        }
+    }
 
 
 

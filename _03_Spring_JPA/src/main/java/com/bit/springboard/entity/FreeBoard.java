@@ -1,8 +1,10 @@
 package com.bit.springboard.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,10 +14,18 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "freeboard")
+@DynamicInsert
+// @SequenceGenerator: 시퀀스에 대한 설정을 할 수 있는 어노테이션
+@SequenceGenerator(
+        name = "FreeBoardSeqGenerator",
+        sequenceName = "freeboard_seq",
+        initialValue = 1, allocationSize = 1
+)
 public class FreeBoard {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.SEQUENCE,
+            generator = "FreeBoardSeqGenerator"
     )
     private Long id;
 
@@ -35,7 +45,7 @@ public class FreeBoard {
 
     private int cnt;
 
-    @OneToMany(mappedBy = "freeBoard")
+    @OneToMany(mappedBy = "freeBoard", cascade = CascadeType.ALL)
     /*
     * 양방향 관계 매핑 시 순환참조 에러가 발생하는 경우가 생기는데
     * 순환참조 에러를 방지하기 위해서 부모 엔티티 필드에는
@@ -44,5 +54,6 @@ public class FreeBoard {
     * 자식 엔티티 필드에는 @JsonBackReference 어노테이션을 사용하여
     * 직렬화가 되지 않도록 설정한다.
     * */
+    @JsonManagedReference
     List<FreeBoardFile> boardFileList = new ArrayList<>();
 }

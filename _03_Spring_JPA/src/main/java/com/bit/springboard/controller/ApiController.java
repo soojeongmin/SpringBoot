@@ -3,6 +3,7 @@ package com.bit.springboard.controller;
 import com.bit.springboard.dto.BoardDto;
 import com.bit.springboard.dto.MemberDto;
 import com.bit.springboard.dto.ResponseDto;
+import com.bit.springboard.entity.FreeBoard;
 import com.bit.springboard.entity.Member;
 import com.bit.springboard.service.ApiService;
 import com.bit.springboard.service.BoardService;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.net.URI;
 import java.util.List;
@@ -240,13 +242,13 @@ public class ApiController {
 
     @PostMapping("/boards")
     public ResponseEntity<?> post(BoardDto boardDto, MultipartFile[] uploadFiles) {
-        ResponseDto<BoardDto> responseDto = new ResponseDto<>();
+        ResponseDto<FreeBoard> responseDto = new ResponseDto<>();
         try {
-            BoardDto returnBoardDto = apiService.post(boardDto, uploadFiles);
+            FreeBoard freeBoard = apiService.post(boardDto, uploadFiles);
 
             responseDto.setStatusCode(201);
             responseDto.setStatusMessage("created");
-            responseDto.setData(returnBoardDto);
+            responseDto.setData(freeBoard);
 
             return ResponseEntity.created(URI.create("/boards")).body(responseDto);
         } catch(Exception e) {
@@ -256,7 +258,24 @@ public class ApiController {
         }
     }
 
+    @GetMapping("/boards/{id}")
+    public ResponseEntity<?> boardDetail(@PathVariable("id") Long id) {
+        ResponseDto<FreeBoard> responseDto = new ResponseDto<>();
 
+        try {
+            FreeBoard freeBoard = apiService.findFreeBoardById(id);
+
+            responseDto.setStatusCode(200);
+            responseDto.setStatusMessage("OK");
+            responseDto.setData(freeBoard);
+
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            responseDto.setStatusCode(500);
+            responseDto.setStatusMessage(e.getMessage());
+            return ResponseEntity.internalServerError().body(responseDto);
+        }
+    }
 
 
 

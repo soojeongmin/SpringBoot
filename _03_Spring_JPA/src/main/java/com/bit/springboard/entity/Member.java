@@ -1,18 +1,21 @@
 package com.bit.springboard.entity;
 
+import com.bit.springboard.dto.MemberDto;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
 @Entity
-//@Table(name="T_MEMBER")
+//@Table(name = "T_MEMBER")
 @Getter
 @Setter
-@DynamicInsert // null 값은 default 값으로 대체
+@DynamicInsert
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Member {
     @Id
     @GeneratedValue(
@@ -20,25 +23,44 @@ public class Member {
     )
     private Long id;
 
-    @Column(unique = true, length=20)
+    @Column(unique = true, length = 20)
     private String username;
 
-    @Column(length=300)
+    @Column(length = 300)
     private String password;
 
-    @Column(length=50)
     private String email;
 
-    @Column(unique = true, length=50)
+    @Column(unique = true)
     private String nickname;
 
-    @Column(length=20)
     private String tel;
 
     @ColumnDefault("'ROLE_USER'")
     private String role;
 
 //    @Transient
-//    private LocalDateTime Regdate;
-    // java에서만 쓸 필드는 @Transient를 붙여준다.
+//    private LocalDateTime regdate;
+
+    public MemberDto toDto() {
+        return MemberDto.builder()
+                .id(this.id)
+                .username(this.username)
+                .password(this.password)
+                .email(this.email)
+                .nickname(this.nickname)
+                .tel(this.tel)
+                .role(this.role)
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
 }

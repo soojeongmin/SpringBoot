@@ -40,4 +40,9 @@ public interface ApiService {
     List<Member> findByIdBetween(Long startId, Long endId);
 
     List<FreeBoard> findByMemberUsername(String username);
+
+    List<Member> findByEmail(String email);
+
+    List<Member> findBiggerThanNicknameContaining(Long id, String nickname);
+
 }

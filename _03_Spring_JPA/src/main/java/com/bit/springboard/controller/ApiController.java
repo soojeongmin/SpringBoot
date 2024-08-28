@@ -381,4 +381,45 @@ public class ApiController {
             return ResponseEntity.internalServerError().body(responseDto);
         }
     }
+
+    @GetMapping("/members-email")
+    public ResponseEntity<?> findByEmail(@RequestParam("email") String email) {
+        ResponseDto<Member> responseDto = new ResponseDto<>();
+
+        try {
+            List<Member> memberList = apiService.findByEmail(email);
+
+            responseDto.setStatusCode(200);
+            responseDto.setStatusMessage("OK");
+            responseDto.setDataList(memberList);
+
+            return ResponseEntity.ok(responseDto);
+
+        } catch (Exception e) {
+            responseDto.setStatusCode(500);
+            responseDto.setStatusMessage(e.getMessage());
+            return ResponseEntity.internalServerError().body(responseDto);
+        }
+    }
+
+    @GetMapping("/members-id-nickname")
+    public ResponseEntity<?> findBiggerThanNicknameContaining(@RequestParam("id") Long id,
+                                                                @RequestParam("nickname") String nickname) {
+        ResponseDto<Member> responseDto = new ResponseDto<>();
+
+        try {
+            List<Member> memberList = apiService.findBiggerThanNicknameContaining(id, nickname);
+
+            responseDto.setStatusCode(200);
+            responseDto.setStatusMessage("OK");
+            responseDto.setDataList(memberList);
+
+            return ResponseEntity.ok(responseDto);
+
+        } catch (Exception e) {
+            responseDto.setStatusCode(500);
+            responseDto.setStatusMessage(e.getMessage());
+            return ResponseEntity.internalServerError().body(responseDto);
+        }
+    }
 }

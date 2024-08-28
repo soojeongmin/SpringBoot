@@ -143,4 +143,14 @@ public class ApiServiceImpl implements ApiService {
     public List<FreeBoard> findByMemberUsername(String username) {
         return freeBoardRepository.findByMemberUsername(username);
     }
+
+    @Override
+    public List<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<Member> findBiggerThanNicknameContaining(Long id, String nickname) {
+        return memberRepository.findBiggerThanNicknameContaining(id, nickname);
+    }
 }

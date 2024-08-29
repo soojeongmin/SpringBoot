@@ -36,7 +36,8 @@ public class FreeServiceImpl implements BoardService {
     @Override
     public BoardDto post(BoardDto boardDto, MultipartFile[] uploadFiles) {
 
-        Member member = memberRepository.findByNickname(boardDto.getNickname());
+        Member member = memberRepository.findByNickname(boardDto.getNickname())
+                .orElseThrow(() -> new RuntimeException("member not exist"));
 
         boardDto.setRegdate(LocalDateTime.now());
         boardDto.setModdate(LocalDateTime.now());
@@ -67,7 +68,7 @@ public class FreeServiceImpl implements BoardService {
 
     @Override
     public Page<BoardDto> findAll(Map<String, String> searchMap, Pageable pageable) {
-        Page<FreeBoard> freeBoardPage = freeBoardRepository.findAll(pageable);
+        Page<FreeBoard> freeBoardPage = freeBoardRepository.findAllFreeBoard(pageable);
 
         if(searchMap.get("searchKeyword") != null) {
             if(searchMap.get("searchCondition").toLowerCase().equals("all")) {

@@ -153,4 +153,10 @@ public class ApiServiceImpl implements ApiService {
     public List<Member> findBiggerThanNicknameContaining(Long id, String nickname) {
         return memberRepository.findBiggerThanNicknameContaining(id, nickname);
     }
+
+    @Override
+    public Page<Member> pageMembers(Pageable pageable) {
+        return memberRepository.findAllMembers(pageable);
+    }
+
 }

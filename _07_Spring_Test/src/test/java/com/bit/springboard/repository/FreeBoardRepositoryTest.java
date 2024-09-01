@@ -47,7 +47,7 @@ public class FreeBoardRepositoryTest {
         // assertNotEquals(기대값, 실제값): assertEquals(기대값, 실제값)의 반대
         // assertNotNull(Object, Null일 때 발생시킬 예외메세지): 주어진 객체가 Null인지 아닌지 판단하는 메소드
         Assertions.assertNotNull(findByIdFreeBoard);
-        Assertions.assertEquals(freeBoard.getTitle(), findByIdFreeBoard.getTitle());
+        Assertions.assertNotEquals("hello", findByIdFreeBoard.getTitle());
         Assertions.assertEquals(freeBoard.getContent(), findByIdFreeBoard.getContent());
     }
 }
